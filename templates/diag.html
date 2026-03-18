@@ -11,4 +11,16 @@
     <pre>{{ output }}</pre>
   {% endif %}
 </div>
+<div class="card">
+  <h2>SSH Diagnostics</h2>
+  <form method="post" action="/diag/ssh" style="display:flex;flex-direction:column;gap:0.5rem;max-width:400px;">
+    <input type="text" name="host" placeholder="Host (e.g. 192.168.1.1)">
+    <input type="text" name="username" placeholder="Username">
+    <input type="password" name="password" placeholder="Password">
+    <button class="btn" type="submit">Connect</button>
+  </form>
+  {% if ssh_output %}
+    <pre>{{ ssh_output }}</pre>
+  {% endif %}
+</div>
 {% endblock %}

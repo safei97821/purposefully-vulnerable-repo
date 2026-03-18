@@ -32,6 +32,8 @@ IntraPanel is a fictional internal admin dashboard for a small SaaS company. It 
 | Jinja2 | 2.11.3 | CVE-2020-28493 (ReDoS) |
 | requests | 2.19.1 | CVE-2018-18074 (credential exposure on redirect) |
 | PyYAML | 5.1 | CVE-2020-14343 (arbitrary code execution via `yaml.load`) |
+| Pillow | 8.0.0 | CVE-2021-25290 (heap buffer overflow, CVSS 9.8) |
+| paramiko | 2.4.1 | CVE-2018-1000805 (auth bypass, CVSS 9.8) |
 
 ---
 

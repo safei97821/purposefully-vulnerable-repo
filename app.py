@@ -1,8 +1,10 @@
 import os
 import subprocess
 
+import paramiko
 import requests
 import yaml
+from PIL import Image
 from flask import (Flask, flash, redirect, render_template, request,
                    session, url_for, jsonify)
 
@@ -143,6 +145,11 @@ def files_upload():
         # No filename sanitization — client-supplied name used directly
         save_path = os.path.join("uploads", f.filename)
         f.save(save_path)
+        try:
+            img = Image.open(save_path)
+            img.thumbnail((128, 128))
+        except Exception:
+            pass
         flash(f"Uploaded {f.filename}")
     return redirect(url_for("files"))
 
@@ -156,6 +163,27 @@ def diag():
     if "user_id" not in session:
         return redirect(url_for("login"))
     return render_template("diag.html")
+
+
+@app.route("/diag/ssh", methods=["GET", "POST"])
+def diag_ssh():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    output = None
+    if request.method == "POST":
+        host = request.form.get("host", "")
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        try:
+            client = paramiko.SSHClient()
+            client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            client.connect(host, username=username, password=password, timeout=5)
+            _, stdout, _ = client.exec_command("whoami")
+            output = stdout.read().decode()
+            client.close()
+        except Exception as e:
+            output = f"Error: {e}"
+    return render_template("diag.html", ssh_output=output)
 
 
 @app.route("/diag/ping", methods=["GET", "POST"])
