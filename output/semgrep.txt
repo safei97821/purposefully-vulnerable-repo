@@ -1,0 +1,23 @@
+                   
+                   
+┌─────────────────┐
+│ 3 Code Findings │
+└─────────────────┘
+                         
+  [36m[22m[24m  app.py[0m
+   ❯❯❱ rules.py.command-injection.subprocess-shell-true
+          Potential command injection: subprocess is used with shell=True. Avoid shell=True and pass arguments
+          as a list.                                                                                          
+                                                                                                              
+          134┆ result = subprocess.call(["sh", "-c", "cat " + filepath], shell=True)
+            ⋮┆----------------------------------------
+          197┆ output = subprocess.check_output("ping -c 1 " + host, shell=True,
+          198┆                                  stderr=subprocess.STDOUT).decode()
+                                                  
+  [36m[22m[24m  rules/command-injection.test.py[0m
+   ❯❯❱ rules.py.command-injection.subprocess-shell-true
+          Potential command injection: subprocess is used with shell=True. Avoid shell=True and pass arguments
+          as a list.                                                                                          
+                                                                                                              
+            6┆ subprocess.run(cmd, shell=True)
+

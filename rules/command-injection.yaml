@@ -1,0 +1,21 @@
+rules:
+  - id: py.command-injection.subprocess-shell-true
+    message: "Potential command injection: subprocess is used with shell=True. Avoid shell=True and pass arguments as a list."
+    severity: ERROR
+    languages:
+      - python
+    patterns:
+      - pattern: subprocess.$F(..., shell=True, ...)
+      - metavariable-regex:
+          metavariable: $F
+          regex: "^(run|call|check_output|Popen)$"
+
+  - id: py.command-injection.os-system-dynamic
+    message: "Potential command injection: os.system executes a dynamic command. Avoid os.system or ensure strict validation."
+    severity: WARNING
+    languages:
+      - python
+    patterns:
+      - pattern: os.system($CMD)
+      - pattern-not: os.system("...")
+      - pattern-not: os.system('...')
